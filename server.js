@@ -7,12 +7,14 @@ app.use(express.json());
 app.use(cors());
 
 // MongoDB Connection
+// MongoDB Connection
 const MONGO_URI = process.env.MONGO_URI || "your_mongodb_connection_string";
-mongoose
-  .connect(MONGO_URI)
-  .then(() => console.log("MongoDB Connected Successfully"))
-  .catch((err) => console.error("MongoDB Connection Error:", err));
-
+mongoose.connect(MONGO_URI, {
+  serverSelectionTimeoutMS: 30000,
+  socketTimeoutMS: 45000,
+})
+.then(() => console.log("MongoDB Connected Successfully!"))
+.catch((err) => console.error("MongoDB Connection Error:", err));
 // User Schema & Model
 const userSchema = new mongoose.Schema({
   email: { type: String, required: true, unique: true },
