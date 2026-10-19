@@ -24,6 +24,16 @@ const userSchema = new mongoose.Schema({
   password: { type: String, required: true },
   balance: { type: Number, default: 0 },
   adsWatched: { type: Number, default: 0 },
+  createdAt: { type: Date, default: Date.now },
+  // 👇 Yeh 3 nayi lines yahan add karni hain:
+  todayAdsCount: { type: Number, default: 0 },
+  lastAdDate: { type: String, default: "" },
+  lastAdTime: { type: Number, default: 0 }
+});const userSchema = new mongoose.Schema({
+  email: { type: String, required: true, unique: true },
+  password: { type: String, required: true },
+  balance: { type: Number, default: 0 },
+  adsWatched: { type: Number, default: 0 },
   createdAt: { type: Date, default: Date.now }
 });
 
