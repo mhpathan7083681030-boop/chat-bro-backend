@@ -7,7 +7,11 @@ const cors = require("cors");
 
 const app = express();
 app.use(express.json());
-app.use(cors());
+app.use(cors());// Global System Settings for Ad Safety
+let globalSettings = {
+  dailyAdLimit: 20,
+  cooldownSeconds: 20
+};
 
 // MongoDB Connection
 const MONGO_URI = process.env.MONGO_URI || "your_mongodb_connection_string";
@@ -123,7 +127,13 @@ app.post("/api/withdraw", async (req, res) => {
 
 
 // --- ADMIN DASHBOARD ROUTES ---
-
+// Admin Settings Update Route
+app.post('/api/admin/settings', (req, res) => {
+  const { dailyAdLimit, cooldownSeconds } = req.body;
+  if (dailyAdLimit !== undefined) globalSettings.dailyAdLimit = dailyAdLimit;
+  if (cooldownSeconds !== undefined) globalSettings.cooldownSeconds = cooldownSeconds;
+  res.json({ message: "Settings updated successfully!", settings: globalSettings });
+});
 // Secret Passcode for Admin Panel access: AdminSecret123
 const ADMIN_KEY = "AdminSecret123";
 
