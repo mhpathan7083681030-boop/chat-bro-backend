@@ -77,10 +77,10 @@ app.post("/api/login", async (req, res) => {
   }
 });
 
-// Track Ad Impression Route (With Limit & Cooldown Protection)
+// Track Ad Impression Route (With Limit, Cooldown & Multi-Platform Support)
 app.post("/api/track-ad", async (req, res) => {
   try {
-    const { email, rewardAmount = 0.002 } = req.body;
+    const { email, rewardAmount = 0.002, platform = "General" } = req.body;
     const today = new Date().toISOString().split('T')[0];
 
     let user = await User.findOne({ email });
@@ -109,7 +109,15 @@ app.post("/api/track-ad", async (req, res) => {
     user.adsWatched += 1;
     await user.save();
 
-    res.json({ success: true, balance: user.balance, adsWatched: user.adsWatched, todayAdsCount: user.todayAdsCount });
+    console.log(`[Ad Tracked] User: ${email} | Platform: ${platform} | Balance: ${user.balance}`);
+
+    res.json({ 
+      success: true, 
+      balance: user.balance, 
+      adsWatched: user.adsWatched, 
+      todayAdsCount: user.todayAdsCount,
+      platform: platform 
+    });
   } catch (error) {
     res.status(500).json({ success: false, message: "Error tracking ad" });
   }
